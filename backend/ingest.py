@@ -15,6 +15,8 @@ from dotenv import load_dotenv
 import psycopg
 from pgvector.psycopg import register_vector
 from sentence_transformers import SentenceTransformer
+from pypdf import PdfReader
+
 
 load_dotenv()
 DATABASE_URL = os.environ.get("DATABASE_URL")
@@ -72,7 +74,7 @@ def main():
 		sys.exit(1)
 
 	print(f"Extracting text from {pdf_path.name}...")
-	text = extract_text(pdf_path)
+	text = extract_text_from_pdf(pdf_path)
 	print(f"Extracted {len(text)} characters.")
 
 	print("Chunking...")
