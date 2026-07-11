@@ -7,8 +7,35 @@ A Q&A app where every answer shows its source and a live dashboard proves the re
 - Live eval panel: faithfulness score (does the answer actially follow from retrived chunks?) and retrieval precision, computed per-query with LLM as  judge right in the UI.
 
 ## Stack
-- Backend: Fast API, PostgreSQL + pgvector extension
-- Retrieval: pgvector cosine search + Postgres tsvector full-text, reranked with Cohere's rerank APi (free tire) or local cross-encoder
-- Generation: Claude API
-- Frontend: Nextjs, streaming via SSE
-- Eval: a lightweight LLN as judge score
+- Embeddings: BAAI/bge-small-en-v1.5 via sentence-transformer, local, freee
+-  Reranking: cross-encoder/ms-macro-MiniLM-L-6-v2, local free
+- Generation: Groq(llama-3.3-70b-versatile)
+- Retrival: pgvector (semantic) + Postgress full-text(keyword), merged, no cost just postgress
+
+## Enviroment Setup
+1. Start Postgress (with Pgvector) via Docker:
+ ```bash
+	docker compose up -d
+ ```
+ This will pull the pgvector/pgvector:pg16 image and initialize the database, running init.sql automatically to enable the vector extension.
+
+ 2. Set up the Python backend enviroment:
+ ```bash
+	cd backend
+	python3 -m venv venv
+	source venv/bin/activate
+	pip install -r requirement.txt
+	cp .env.example .env
+ ``` 
+The .env defaults already match docker-compose.yml credentials, so you don't need to edit DATABASE_URL. You'll need to add your real GROQ_API_KEY. 
+sentence-transformers will download two models on first use (an embedding model and a reranking model) both run locally on your CPU, no API or cost inolved
+
+3. Verify everything is wired up correctly:
+```bash
+	python check_setup.py
+```
+```expected-output
+	pgvector extension is enabled.
+	Connected to: PostgreSQL 16.x ....
+	Setup check passed. Ready for step 2 (schema. design)
+```
