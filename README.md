@@ -1,5 +1,10 @@
-# A RAG system with a visible retrival quality dashboard
-A Q&A app where every answer shows its source and a live dashboard proves the retrival is actually accurate, not just "looks plausible".
+# A RAG question and answering system for PDFs
+You ingest PDF and it extracts text and splits it into chunks, creating local embedings for each chunk and stores them in PostgreSQL with pgvector.
+When asked a question the system retrieves candidate chunks using both:
+	- semantic/vector similarity search
+	- PostgreSQL full text key word search
+Merges and reranks those results with local cross-encoder model.
+
 ### Features
 - Hybrid retrieval: pgvector semantic search + Postgress full-text (BM25-style) search, merged
 - Reranking step (cross-encoder or Cohere rerank) before generation
