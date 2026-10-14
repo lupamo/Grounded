@@ -24,7 +24,7 @@ from retrieve import retrieve, EMBEDDING_MODEL_NAME, RERANKER_MODEL_NAME
 load_dotenv()
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
-GROQ_MODEL = "llama-3.3-70b-versatile"
+GROQ_MODEL = "openai/gpt-oss-120b"
 
 SYSTEM_PROMPT = """You are a research assistant. Answer the user's question using ONLY the numbered source excerpts provided below. Follow these rules strictly:
 
